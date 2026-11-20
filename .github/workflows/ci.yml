@@ -8,6 +8,10 @@ on:
     branches: [main]
 
 jobs:
+
+  # ==========================================
+  # JOB 1: RUN API TESTS
+  # ==========================================
   test:
     name: Run API Tests
     runs-on: ubuntu-latest
@@ -29,6 +33,9 @@ jobs:
       - name: Run tests
         run: pytest -v
 
+  # ==========================================
+  # JOB 2: BUILD AND PUSH TO DOCKER HUB
+  # ==========================================
   docker-build:
     name: Build and Push Docker Hub Image
     runs-on: ubuntu-latest
@@ -67,6 +74,9 @@ jobs:
             deepakchaudhary11/chest-cancer-mlops:latest
             deepakchaudhary11/chest-cancer-mlops:${{ github.sha }}
 
+  # ==========================================
+  # JOB 3: BUILD AND PUSH TO GITHUB CONTAINER REGISTRY
+  # ==========================================
   publish-ghcr:
     name: Publish to GitHub Container Registry
     runs-on: ubuntu-latest
