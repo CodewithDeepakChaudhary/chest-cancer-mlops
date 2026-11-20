@@ -13,6 +13,7 @@ MODEL_PATH = PROJECT_ROOT / "models" / "chest_cancer_savedmodel"
 CLASS_NAMES = ["Bengin", "Malignant", "Normal"]
 IMAGE_SIZE = (160, 160)
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10 MB
+ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/jpg"}
 
 # Initialize FastAPI
 app = FastAPI(
@@ -48,9 +49,7 @@ def health():
 async def predict(file: UploadFile = File(...)):
 
     # Validate file type
-    allowed_types = ["image/jpeg", "image/png", "image/jpg"]
-
-    if file.content_type not in allowed_types:
+    if file.content_type not in ALLOWED_IMAGE_TYPES:
         raise HTTPException(
             status_code=400,
             detail="Only JPG, JPEG and PNG images are allowed"
@@ -75,11 +74,17 @@ async def predict(file: UploadFile = File(...)):
 
         # IMPORTANT:
         # Use exactly the same preprocessing as model training
-        image_array = tf.io.decode_image(
-            contents,
-            channels=3,
-            expand_animations=False
-        )
+        try:
+            image_array = tf.io.decode_image(
+                contents,
+                channels=3,
+                expand_animations=False
+            )
+        except Exception as exc:
+            raise HTTPException(
+                status_code=400,
+                detail="Uploaded file is not a valid image"
+            ) from exc
 
         image_array.set_shape([None, None, 3])
 
@@ -99,6 +104,11 @@ async def predict(file: UploadFile = File(...)):
             image_array,
             verbose=0
         )[0]
+
+        if len(predictions) != len(CLASS_NAMES):
+            raise RuntimeError(
+                "Model output size does not match configured class names"
+            )
 
         predicted_index = int(tf.argmax(predictions).numpy())
         predicted_class = CLASS_NAMES[predicted_index]
