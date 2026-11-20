@@ -12,4 +12,4 @@ __pycache__/
 data/raw/
 data/processed/
 mlruns/
-"@ | Set-Content .gitignore
+"@ | Set-Content .gitignoremlflow.db
