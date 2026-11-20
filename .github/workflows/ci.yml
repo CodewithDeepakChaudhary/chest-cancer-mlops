@@ -8,10 +8,7 @@ on:
     branches: [main]
 
 jobs:
-
-  # ==========================================
   # JOB 1: RUN API TESTS
-  # ==========================================
   test:
     name: Run API Tests
     runs-on: ubuntu-latest
@@ -33,9 +30,7 @@ jobs:
       - name: Run tests
         run: pytest -v
 
-  # ==========================================
   # JOB 2: BUILD AND PUSH TO DOCKER HUB
-  # ==========================================
   docker-build:
     name: Build and Push Docker Hub Image
     runs-on: ubuntu-latest
@@ -45,16 +40,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Verify Docker Hub token
-        env:
-          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-        run: |
-          if [ -z "$DOCKERHUB_TOKEN" ]; then
-            echo "ERROR: DOCKERHUB_TOKEN is missing"
-            exit 1
-          fi
-          echo "Docker Hub token is available"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -69,14 +54,13 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
+          file: ./Dockerfile
           push: true
           tags: |
             deepakchaudhary11/chest-cancer-mlops:latest
             deepakchaudhary11/chest-cancer-mlops:${{ github.sha }}
 
-  # ==========================================
   # JOB 3: BUILD AND PUSH TO GITHUB CONTAINER REGISTRY
-  # ==========================================
   publish-ghcr:
     name: Publish to GitHub Container Registry
     runs-on: ubuntu-latest
@@ -105,6 +89,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
+          file: ./Dockerfile
           push: true
           tags: |
             ghcr.io/codewithdeepakchaudhary/chest-cancer-mlops:latest
