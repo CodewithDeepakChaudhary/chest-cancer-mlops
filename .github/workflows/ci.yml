@@ -97,5 +97,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/chest-cancer-mlops:latest
-            ghcr.io/${{ github.repository_owner }}/chest-cancer-mlops:${{ github.sha }}
+            ghcr.io/codewithdeepakchaudhary/chest-cancer-mlops:latest
+            ghcr.io/codewithdeepakchaudhary/chest-cancer-mlops:${{ github.sha }}
