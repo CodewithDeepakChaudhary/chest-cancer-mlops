@@ -17,15 +17,11 @@ RUN pip install --no-cache-dir --upgrade pip \
 # Copy project files
 COPY . .
 
-# Create directory for runtime artifacts
+# Create directory for runtime artifacts if needed
 RUN mkdir -p data/artifacts
 
-# MLflow Model Registry connection
-ENV MLFLOW_TRACKING_URI=http://host.docker.internal:5000
-ENV MLFLOW_MODEL_NAME=chest-cancer-classifier
-ENV MLFLOW_MODEL_STAGE=Production
-
-# API configuration
+# Expose API port
 EXPOSE 8080
 
+# Start FastAPI
 CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8080"]
