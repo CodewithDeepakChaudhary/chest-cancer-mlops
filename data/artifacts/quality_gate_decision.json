@@ -1,15 +1,12 @@
 {
-    "timestamp": "2026-11-20T09:36:07.149732+00:00",
     "champion_model": "models/chest_cancer_model.keras",
-    "champion_accuracy": 0.949685534591195,
-    "champion_macro_f1": 0.8953627180899909,
-    "monitoring_batch_macro_f1": 0.8953627180899909,
-    "monitoring_batch_accuracy": 0.949685534591195,
-    "candidate_model": null,
-    "candidate_training_status": "BLOCKED",
+    "candidate_model": "models/candidates/candidate_model.keras",
+    "promotion_metric": "Macro F1",
+    "criteria": {
+        "candidate_macro_f1_must_be_at_least_champion": true,
+        "candidate_malignant_recall_must_not_decrease": true
+    },
     "promotion_status": "HOLD",
     "promotion_eligible": false,
-    "reason": "Candidate retraining was not performed because the original image dataset is unavailable in this Codespace. The monitoring input reuses existing labelled test predictions and is not a new independent incoming dataset. Champion remains unchanged.",
-    "promotion_metric": "Macro F1",
-    "metric_justification": "Macro F1 gives equal importance to Bengin, Malignant and Normal classes, which is useful when class counts are imbalanced."
+    "reason": "Candidate training/evaluation is unavailable. Champion remains unchanged."
 }

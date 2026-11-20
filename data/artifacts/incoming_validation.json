@@ -1,0 +1,13 @@
+{
+    "status": "BLOCKED",
+    "reason": "Incoming manifest not found: data/incoming/incoming_manifest.csv",
+    "required_columns": [
+        "image_path",
+        "label"
+    ],
+    "expected_classes": [
+        "Bengin",
+        "Malignant",
+        "Normal"
+    ]
+}
